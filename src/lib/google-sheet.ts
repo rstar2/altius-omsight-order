@@ -20,4 +20,36 @@ const serviceAccountAuth = new JWT({
 });
 
 const goggleSheet = new GoogleSpreadsheet(spreadsheetId, serviceAccountAuth);
-export default goggleSheet;
+
+const API = {
+  async load() {
+    await goggleSheet.loadInfo();
+
+    // load only these which will surely include all orders
+    // [A-F] is for user-orders, [J-M] is for the order-variation
+    await this.sheet.loadCells(`${UserOrderA1Address.ID}1:${OrderVariantA1Address.Sizes}1000`);
+  },
+
+  get sheet() {
+    return goggleSheet.sheetsByIndex[0];
+  },
+};
+
+export enum UserOrderA1Address {
+  ID = "A",
+  Name = "B",
+  Email = "C",
+  Model = "D",
+  Size = "E",
+  Color = "F",
+  Extra = "G",
+}
+
+export enum OrderVariantA1Address {
+  Models = "K",
+  Prices = "L",
+  Colors = "M",
+  Sizes = "N",
+}
+
+export default API;

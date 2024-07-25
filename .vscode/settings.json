@@ -3,5 +3,8 @@
         "activityBar.background": "#2A301D",
         "titleBar.activeBackground": "#3B4329",
         "titleBar.activeForeground": "#FAFBF9"
-    }
+    },
+    "cSpell.words": [
+        "formkit"
+    ]
 }

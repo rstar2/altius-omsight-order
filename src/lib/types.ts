@@ -1,14 +1,29 @@
 import { z } from "zod";
 
+export interface ServerSideComponentProp {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
 export type User = {
   email: string;
   name: string;
 };
 
+export type OrderVariant = {
+  // model -> price
+  models: Map<string, number>;
+  // possible colors
+  sizes: Size[];
+  // possible colors
+  colors: string[];
+};
+
 export type Order = {
+  id: string;
   model: string;
   size: Size;
-  color: Color;
+  color: string;
   extra?: string;
 };
 
@@ -20,27 +35,42 @@ export type UserOrders = User & {
 const Size = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] as const;
 export type Size = (typeof Size)[number];
 
-// here use native enum (no reason way)
-export enum Color {
-  Red = "Red",
-  Blue = "Blue",
-  Green = "Green",
-  Black = "Black",
-}
+export const EmailSchema = z.string().trim().email({
+  message: "Invalid email",
+});
 
 export const OrderAddSchema = z.object({
-  email: z.string().email(),
-  name: z.string({
-    invalid_type_error: "Please set a name.",
-  }),
-  model: z.string({
-    invalid_type_error: "Please select a model.",
-  }),
+  email: EmailSchema,
+  name: z
+    .string({
+      invalid_type_error: "Please set a name.",
+    })
+    .trim()
+    .min(5, {
+      message: "Name must be at least 5 characters",
+    }),
+  model: z
+    .string({
+      invalid_type_error: "Please select a model.",
+    })
+    .trim()
+    .min(1, {
+      message: "Required a valid model",
+    }),
   size: z.enum(Size, {
     invalid_type_error: "Please select a size.",
   }),
-  color: z.nativeEnum(Color, {
-    invalid_type_error: "Please select a color.",
-  }),
+  color: z
+    .string({
+      invalid_type_error: "Please select a color.",
+    })
+    .trim()
+    .min(1, {
+      message: "Required a valid color",
+    }),
   extra: z.string().optional(),
 });
+
+export type RowA1Address = {
+  a1Row: number;
+};
