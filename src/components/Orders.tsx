@@ -3,7 +3,7 @@
 import { useTransition, useState } from "react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useRouter } from "next/navigation";
-import { Text, List, ListItem, Divider, IconButton, HStack, Spacer, useToast } from "@chakra-ui/react";
+import { FormLabel, Text, List, ListItem, Divider, IconButton, HStack, Spacer, useToast } from "@chakra-ui/react";
 import { MdEdit, MdDelete } from "react-icons/md";
 
 import { Order, User, RowA1Address } from "@/lib/types";
@@ -41,7 +41,7 @@ export default function Orders({ orders }: { orders: (Order & User & RowA1Addres
   const name = orders[0].name;
   return (
     <>
-      <Text>Orders for {name}</Text>
+      <FormLabel>Orders for {name}</FormLabel>
       <Divider my={3} />
       <List ref={listRef}>
         {orders.map((order) => (
