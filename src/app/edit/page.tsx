@@ -22,7 +22,10 @@ export default async function PageAdd({ searchParams }: ServerSideComponentProp)
         <OrderAddEditForm orderVariant={orderVariant} order={order} />
       </CardBody>
 
-      <CardFooter>{email && <Link href={`/orders?email=${email}`}>Orders</Link>}</CardFooter>
+      <CardFooter>
+        <Link href="/">Home</Link>
+        {email && <Link href={`/orders?email=${email}`}>Orders</Link>}
+      </CardFooter>
     </Card>
   );
 }
