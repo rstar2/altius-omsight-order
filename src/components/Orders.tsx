@@ -21,19 +21,19 @@ export default function Orders({ orders }: { orders: (Order & User & RowA1Addres
 
   const handleDeleteOrder = (order: Order & RowA1Address) => {
     startTransitionDelete(async () => {
-      try {
-        await deleteOrder({ id: order.id, a1Row: order.a1Row });
-        // this will "refresh" the page, while this client-component is not-recreated
-        // e.g. it will just refresh the parent PageOrders component and refresh the data
-        router.refresh();
-      } catch (e) {
+      const { error } = (await deleteOrder({ id: order.id, a1Row: order.a1Row })) ?? {};
+      if (error) {
         toast({
           title: "Delete failed.",
-          //   description: `${e}`,
+          description: error,
           status: "error",
           duration: 3000,
           isClosable: true,
         });
+      } else {
+        // this will "refresh" the page, while this client-component is not-recreated
+        // e.g. it will just refresh the parent PageOrders component and refresh the data
+        router.refresh();
       }
     });
   };

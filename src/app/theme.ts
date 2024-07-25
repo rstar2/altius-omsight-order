@@ -49,7 +49,8 @@ const ButtonStyle = defineStyleConfig({
   // The default size and variant values
   defaultProps: {
     size: "md",
-    variant: "outline",
+    // @ts-ignore "solid" is a default button variant
+    variant: "solid",
   },
 });
 

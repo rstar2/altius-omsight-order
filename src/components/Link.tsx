@@ -18,7 +18,9 @@ export default function Link({
       pointerEvents={disabled ? "none" : undefined}
       sx={{
         opacity: disabled ? 0.5 : undefined,
+        textDecoration: "underline",
       }}
+      color="brand.500"
     >
       {children}
     </ChakraLink>

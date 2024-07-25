@@ -85,13 +85,7 @@ function SubmitButton({ isEdit }: { isEdit: boolean }) {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      isDisabled={pending}
-      isLoading={pending}
-      loadingText={isEdit ? "Editing" : "Adding"}
-      variant="solid"
-    >
+    <Button type="submit" isDisabled={pending} isLoading={pending} loadingText={isEdit ? "Editing" : "Adding"}>
       {isEdit ? "Edit" : "Add"}
     </Button>
   );

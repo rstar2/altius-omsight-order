@@ -85,7 +85,7 @@ export async function editOrder(_prevState: any, formData: FormData) {
     await goggleSheetAPI.load();
 
     const currentId = goggleSheetAPI.sheet.getCellByA1(UserOrderA1Address.ID + a1Row).value;
-    if (currentId === id)
+    if (currentId !== id)
       throw new Error(
         `Order with id ${id} is not on the correct A1 address any more - sheet has changed in the meantime`,
       );
@@ -110,24 +110,24 @@ export async function deleteOrder({ id, a1Row }: Pick<Order, "id"> & RowA1Addres
   // simulate a longer delay
   //   await timers.setTimeout(5000);
 
-  //   try {
-  await goggleSheetAPI.load();
-  const rows = await goggleSheetAPI.sheet.getRows();
-  const row = rows.find((row) => row.rowNumber === a1Row);
-  if (!row) throw new Error(`No order with A1 address A${a1Row}`);
+  try {
+    await goggleSheetAPI.load();
+    const rows = await goggleSheetAPI.sheet.getRows();
+    const row = rows.find((row) => row.rowNumber === a1Row);
+    if (!row) throw new Error(`No order with A1 address A${a1Row}`);
 
-  // validate if sheet has been changed in the meantime
-  // @ts-expect-error (use the private row._rawData[] as it's the only way to get the value of a cell by index)
-  const currentId = row._rawData[0];
-  if (currentId !== id)
-    throw new Error(
-      `Order with id ${id} is not on the correct A1 address any more - sheet has changed in the meantime`,
-    );
+    // validate if sheet has been changed in the meantime
+    // @ts-expect-error (use the private row._rawData[] as it's the only way to get the value of a cell by index)
+    const currentId = row._rawData[0];
+    if (currentId !== id)
+      throw new Error(
+        `Order with id ${id} is not on the correct A1 address any more - sheet has changed in the meantime`,
+      );
 
-  await row.delete();
-  //   } catch (e) {
-  //     return { error: e instanceof Error ? e.message : `Cannot delete order with A1 address A${a1Row}` };
-  //   }
+    await row.delete();
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : `Cannot delete order with A1 address A${a1Row}` };
+  }
 }
 
 export async function getOrderFor(a1Row: RowA1Address["a1Row"]) {
