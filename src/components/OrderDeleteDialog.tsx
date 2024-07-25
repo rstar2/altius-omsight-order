@@ -20,7 +20,7 @@ export function OrderDeleteDialog({ isOpen, onClose }: { isOpen: boolean; onClos
             Delete Order
           </AlertDialogHeader>
 
-          <AlertDialogBody>Are you sure? You can't undo this action afterwards.</AlertDialogBody>
+          <AlertDialogBody>Are you sure? You can&apos;t undo this action afterwards.</AlertDialogBody>
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={() => onClose(false)}>

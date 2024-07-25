@@ -12,7 +12,7 @@ export default async function PageAdd({ searchParams }: ServerSideComponentProp)
   const order = await getOrderFor(+a1Row);
   if (!order) return <Text>No such order anymore</Text>;
 
-  if (order.email !== email) return <Text>No such user's order anymore</Text>;
+  if (order.email !== email) return <Text>No such user&apos;s order anymore</Text>;
 
   const orderVariant = await getOrderVariant();
 
