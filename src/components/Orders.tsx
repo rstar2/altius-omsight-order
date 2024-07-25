@@ -47,7 +47,9 @@ export default function Orders({ orders }: { orders: (Order & User & RowA1Addres
         {orders.map((order) => (
           <ListItem key={order.a1Row}>
             <HStack spacing={2}>
-              <Text>{order.model}</Text>
+              <Text>
+                {order.model} - {order.size}, {order.color} {order.extra ? `(${order.extra})` : ""}
+              </Text>
               <Spacer />
               <IconButton
                 aria-label="Edit"

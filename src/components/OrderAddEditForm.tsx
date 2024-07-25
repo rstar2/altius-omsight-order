@@ -2,12 +2,18 @@
 
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { FormControl, FormLabel, FormErrorMessage, VStack, Input, Button, useToast } from "@chakra-ui/react";
+import { FormControl, FormLabel, FormErrorMessage, VStack, Input, Select, Button, useToast } from "@chakra-ui/react";
 
 import { addOrder, editOrder } from "@/lib/google-sheet.actions";
-import { Order, RowA1Address, User } from "@/lib/types";
+import { Order, OrderVariant, RowA1Address, User } from "@/lib/types";
 
-export default function OrderAddEditForm({ order }: { order?: Partial<Order & User & RowA1Address> }) {
+export default function OrderAddEditForm({
+  orderVariant,
+  order,
+}: {
+  orderVariant: OrderVariant;
+  order?: Partial<Order & User & RowA1Address>;
+}) {
   // id and a1Row always go together, the id is used only for protection,
   // so that the correct order to be edited (if for instance in the meantime the sheet has been chnaged)
   const isEdit = !!order?.id && !!order?.a1Row;
@@ -48,19 +54,40 @@ export default function OrderAddEditForm({ order }: { order?: Partial<Order & Us
 
         <FormControl isInvalid={!!state?.errors?.model}>
           <FormLabel>Model</FormLabel>
-          <Input name="model" defaultValue={order?.model} />
+          {/* <Input name="model" defaultValue={order?.model} /> */}
+          <Select name="model" defaultValue={order?.model}>
+            {orderVariant.models.map(({ name, price }) => (
+              <option value={name} key={name}>
+                {name} - ${price}
+              </option>
+            ))}
+          </Select>
           {state?.errors?.model && <FormErrorMessage>{state.errors.model[0]}</FormErrorMessage>}
         </FormControl>
 
         <FormControl isInvalid={!!state?.errors?.size}>
           <FormLabel>Size</FormLabel>
-          <Input name="size" defaultValue={order?.size} />
+          {/* <Input name="size" defaultValue={order?.size} /> */}
+          <Select name="size" defaultValue={order?.size}>
+            {orderVariant.sizes.map((name) => (
+              <option value={name} key={name}>
+                {name}
+              </option>
+            ))}
+          </Select>
           {state?.errors?.size && <FormErrorMessage>{state.errors.size[0]}</FormErrorMessage>}
         </FormControl>
 
         <FormControl isInvalid={!!state?.errors?.color}>
           <FormLabel>Color</FormLabel>
-          <Input name="color" defaultValue={order?.color} />
+          {/* <Input name="color" defaultValue={order?.color} /> */}
+          <Select name="color" defaultValue={order?.color}>
+            {orderVariant.colors.map((name) => (
+              <option value={name} key={name}>
+                {name}
+              </option>
+            ))}
+          </Select>
           {state?.errors?.color && <FormErrorMessage>{state.errors.color[0]}</FormErrorMessage>}
         </FormControl>
 

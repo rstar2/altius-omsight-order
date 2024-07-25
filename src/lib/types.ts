@@ -12,7 +12,10 @@ export type User = {
 
 export type OrderVariant = {
   // model -> price
-  models: Map<string, number>;
+  models: {
+    name: string;
+    price: number;
+  }[];
   // possible colors
   sizes: Size[];
   // possible colors
@@ -34,6 +37,10 @@ export type UserOrders = User & {
 // here use array as enum (no reason way)
 const Size = ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] as const;
 export type Size = (typeof Size)[number];
+
+export const SizeSchema = z.enum(Size, {
+  invalid_type_error: "Please select a size.",
+});
 
 export const EmailSchema = z.string().trim().email({
   message: "Invalid email",
@@ -57,9 +64,7 @@ export const OrderAddSchema = z.object({
     .min(1, {
       message: "Required a valid model",
     }),
-  size: z.enum(Size, {
-    invalid_type_error: "Please select a size.",
-  }),
+  size: SizeSchema,
   color: z
     .string({
       invalid_type_error: "Please select a color.",

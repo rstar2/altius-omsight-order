@@ -3,7 +3,7 @@ import { Card, CardBody, CardFooter, Text } from "@chakra-ui/react";
 import Link from "@/components/Link";
 import OrderAddEditForm from "@/components/OrderAddEditForm";
 import { ServerSideComponentProp } from "@/lib/types";
-import { getOrderFor } from "@/lib/google-sheet.actions";
+import { getOrderFor, getOrderVariant } from "@/lib/google-sheet.actions";
 
 export default async function PageAdd({ searchParams }: ServerSideComponentProp) {
   const email = searchParams.email as string;
@@ -14,10 +14,12 @@ export default async function PageAdd({ searchParams }: ServerSideComponentProp)
 
   if (order.email !== email) return <Text>No such user's order anymore</Text>;
 
+  const orderVariant = await getOrderVariant();
+
   return (
     <Card>
       <CardBody>
-        <OrderAddEditForm order={order} />
+        <OrderAddEditForm orderVariant={orderVariant} order={order} />
       </CardBody>
 
       <CardFooter>{email && <Link href={`/orders?email=${email}`}>Orders</Link>}</CardFooter>

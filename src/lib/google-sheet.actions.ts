@@ -6,8 +6,8 @@ import { v4 as uuidv4 } from "uuid";
 import { GoogleSpreadsheetCellErrorValue } from "google-spreadsheet";
 import { redirect } from "next/navigation";
 
-import goggleSheetAPI, { UserOrderA1Address } from "./google-sheet";
-import { Order, OrderAddSchema, User, RowA1Address } from "./types";
+import goggleSheetAPI, { OrderVariantA1Address, UserOrderA1Address } from "./google-sheet";
+import { Order, OrderAddSchema, User, RowA1Address, OrderVariant, SizeSchema } from "./types";
 
 /**
  * NOTE: Used from useFormState(), so the first argument is the "previous/initial" state of the form
@@ -163,7 +163,7 @@ export async function getOrdersForUser(email: string) {
     // NOTE: the first row with index 0 is the "header" (name, Email, Model, Size, Color, Extra)
     // NOTE: this same row is A1-xxx in a1Address , e.g. getCell(0, 0) === getCellByA1("A1")
 
-    let row = 1;
+    let row = 2;
     let order;
 
     const orders: (Order & User & RowA1Address)[] = [];
@@ -204,4 +204,43 @@ function getCellValue<T extends string | number = string>(a1Address: string, opt
   if (!optional) throw new Error(`No value in ${a1Address}`);
 
   return undefined;
+}
+
+export async function getOrderVariant(): Promise<OrderVariant> {
+  await goggleSheetAPI.load();
+
+  const models: OrderVariant["models"] = [];
+  const sizes: OrderVariant["sizes"] = [];
+  const colors: OrderVariant["colors"] = [];
+
+  for (let row = 2; ; row++) {
+    let empty = true;
+    const model = getCellValue(OrderVariantA1Address.Models + row, true);
+    if (model) {
+      empty = false;
+      const price = getCellValue<number>(OrderVariantA1Address.Prices + row);
+      models.push({ name: model, price });
+    }
+
+    const sizeStr = getCellValue(OrderVariantA1Address.Sizes + row, true);
+    if (sizeStr) {
+      empty = false;
+      const size = SizeSchema.parse(sizeStr);
+      sizes.push(size);
+    }
+
+    const color = getCellValue(OrderVariantA1Address.Colors + row, true);
+    if (color) {
+      empty = false;
+      colors.push(color);
+    }
+
+    if (empty) break;
+  }
+
+  return {
+    models,
+    colors,
+    sizes,
+  };
 }
