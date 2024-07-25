@@ -1,4 +1,4 @@
-import { Card, CardBody, CardFooter, Text } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, HStack, Text } from "@chakra-ui/react";
 
 import Link from "@/components/Link";
 import OrderAddEditForm from "@/components/OrderAddEditForm";
@@ -23,8 +23,10 @@ export default async function PageAdd({ searchParams }: ServerSideComponentProp)
       </CardBody>
 
       <CardFooter>
-        <Link href="/">Home</Link>
-        {email && <Link href={`/orders?email=${email}`}>Orders</Link>}
+        <HStack>
+          <Link href="/">Home</Link>
+          {email && <Link href={`/orders?email=${email}`}>Orders</Link>}
+        </HStack>
       </CardFooter>
     </Card>
   );

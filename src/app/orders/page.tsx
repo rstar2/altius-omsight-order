@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { Card, CardBody, CardFooter, Text } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, HStack, Text } from "@chakra-ui/react";
 
 import Link from "@/components/Link";
 import Orders from "@/components/Orders";
@@ -19,8 +19,10 @@ export default async function PageOrders({ searchParams }: ServerSideComponentPr
       <CardBody>{error ? <Text>{error.message}</Text> : <Orders orders={orders} />}</CardBody>
 
       <CardFooter>
-        <Link href="/">Home</Link>
-        <Link href={`/add?email=${email}`}>Add</Link>
+        <HStack>
+          <Link href="/">Home</Link>
+          <Link href={`/add?email=${email}`}>Add</Link>
+        </HStack>
       </CardFooter>
     </Card>
   );
